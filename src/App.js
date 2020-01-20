@@ -1,29 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import "./App.css";
 
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
+import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sigin-n-and-sign-up.component";
 import Header from "./components/header/header.component";
 
-const HatsPage = () => {
+import { auth } from "./firebase/firebase.utils";
+
+const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  let unsuscribeFromAuth = () => null;
+
+  useEffect(() => {
+    unsuscribeFromAuth = auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+    });
+    return () => {
+      unsuscribeFromAuth();
+    };
+  }, []);
   return (
     <div>
-      <h1>HatsPage</h1>
-    </div>
-  );
-};
-function App() {
-  return (
-    <div>
-      <Header />
+      <Header currentUser={currentUser} />
       <Switch>
         <Route path="/" component={HomePage} exact />
         <Route path="/shop" component={ShopPage} />
+        <Route path="/signin" component={SignInAndSignUpPage} />
       </Switch>
     </div>
   );
-}
+};
 
 export default App;
