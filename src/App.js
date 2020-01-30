@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -9,29 +9,27 @@ import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sigin-and-sign-up.c
 import CheckoutPage from "./pages/checkout/checkout.component";
 
 import Header from "./components/header/header.component";
-import { setCurrentUser } from "./redux/user/user.actions";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
 import "./App.css";
 
 const App = ({ currentUser, setCurrentUser }) => {
-  let unsuscribeFromAuth = () => null;
+  // let unsubscribeFromAuth = () => null;
 
-  useEffect(() => {
-    unsuscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({ id: snapShot.id, ...snapShot.data() });
-        });
-      }
-      setCurrentUser(userAuth);
-    });
-    return () => {
-      unsuscribeFromAuth();
-    };
-  }, []);
+  // useEffect(() => {
+  //   unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+  //     if (userAuth) {
+  //       const userRef = await createUserProfileDocument(userAuth);
+  //       userRef.onSnapshot(snapShot => {
+  //         setCurrentUser({ id: snapShot.id, ...snapShot.data() });
+  //       });
+  //     }
+  //     setCurrentUser(userAuth);
+  //   });
+  //   return () => {
+  //     unsubscribeFromAuth();
+  //   };
+  // }, []);
   return (
     <div>
       <Header />
@@ -55,8 +53,4 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 });
 
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, null)(App);
