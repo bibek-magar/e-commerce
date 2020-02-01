@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -12,24 +12,26 @@ import Header from "./components/header/header.component";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
 import "./App.css";
+import { checkUserSession } from "./redux/user/user.actions";
 
-const App = ({ currentUser, setCurrentUser }) => {
-  // let unsubscribeFromAuth = () => null;
+const App = ({ currentUser, checkUserSession }) => {
+  let unsubscribeFromAuth = () => null;
 
-  // useEffect(() => {
-  //   unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-  //     if (userAuth) {
-  //       const userRef = await createUserProfileDocument(userAuth);
-  //       userRef.onSnapshot(snapShot => {
-  //         setCurrentUser({ id: snapShot.id, ...snapShot.data() });
-  //       });
-  //     }
-  //     setCurrentUser(userAuth);
-  //   });
-  //   return () => {
-  //     unsubscribeFromAuth();
-  //   };
-  // }, []);
+  useEffect(() => {
+    checkUserSession();
+    //   unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    //     if (userAuth) {
+    //       const userRef = await createUserProfileDocument(userAuth);
+    //       userRef.onSnapshot(snapShot => {
+    //         setCurrentUser({ id: snapShot.id, ...snapShot.data() });
+    //       });
+    //     }
+    //     setCurrentUser(userAuth);
+    //   });
+    //   return () => {
+    //     unsubscribeFromAuth();
+    //   };
+  }, []);
   return (
     <div>
       <Header />
@@ -53,4 +55,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 });
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
