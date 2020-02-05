@@ -11,7 +11,7 @@ import Header from "./components/header/header.component";
 import { checkUserSession } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selector";
 
-import "./App.css";
+import { GlobalStyle } from "./global.styles";
 
 const App = ({ currentUser, checkUserSession }) => {
   useEffect(() => {
@@ -19,6 +19,7 @@ const App = ({ currentUser, checkUserSession }) => {
   }, [checkUserSession]);
   return (
     <div>
+      <GlobalStyle />
       <Header />
       <Switch>
         <Route path="/" component={HomePage} exact />
